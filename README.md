@@ -138,5 +138,5 @@ CodeAlpha_CreditScoringModel/
 
 ## Author
 
-Vignesh Rethinaswamy
+Vignesh R
 Machine Learning Intern – CodeAlpha
