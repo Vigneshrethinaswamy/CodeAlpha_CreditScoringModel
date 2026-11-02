@@ -35,16 +35,14 @@ Target Variable:
 
 ## Project Workflow
 
-1. Data Loading
-2. Data Cleaning
-3. Missing Value Imputation
-4. Exploratory Data Analysis
-5. Train-Test Split
-6. Logistic Regression Training
-7. Random Forest Training
-8. Model Evaluation
-9. Best Model Selection
-10. Model Saving
+1. Load and clean the Give Me Some Credit data
+2. Separate features and target
+3. Stratified 80/20 train/test split
+4. Fit median imputation values on the training split only; apply them to train and test
+5. Run exploratory data analysis
+6. Train Logistic Regression and Random Forest pipelines
+7. Evaluate with threshold-sensitive and ranking metrics
+8. Select and save the model
 
 ---
 
@@ -70,14 +68,18 @@ Used to capture complex non-linear relationships and improve prediction performa
 
 ---
 
-## Results
+## Recorded results
+
+The table below reflects the metrics recorded by the earlier project run. The preprocessing code has since been corrected so missing-value medians are fitted on the training split only. These metrics have **not yet been regenerated after that correction**, so treat them as historical results rather than the verified output of the current code.
 
 | Model               | Accuracy | Precision | Recall | F1 Score | ROC-AUC |
 | ------------------- | -------- | --------- | ------ | -------- | ------- |
 | Logistic Regression | 77.63%   | 18.17%    | 66.98% | 28.58%   | 80.21%  |
 | Random Forest       | 80.58%   | 22.23%    | 76.26% | 34.42%   | 86.78%  |
 
-Best Model: Random Forest
+Best Model in the recorded run: Random Forest
+
+**Important interpretation:** The target is imbalanced. The Random Forest's 80.58% accuracy coexists with only 22.23% precision and 34.42% F1 for the positive/default class (as recorded in the report). Accuracy alone is therefore not a sufficient measure of default detection. Review the confusion matrix, precision-recall trade-off and decision threshold before using predictions.
 
 ---
 
@@ -107,7 +109,7 @@ Best Model: Random Forest
 
 ## Project Structure
 
-CodeAlpha_CreditScoringModel/
+Credit-Risk-Prediction/
 
 ├── data/
 
@@ -134,6 +136,12 @@ CodeAlpha_CreditScoringModel/
 └── README.md
 
 ---
+
+## Limitations
+
+- This is an educational classification project, not a credit underwriting system.
+- Dataset provenance and redistribution terms should be checked before republishing the raw CSV.
+- The saved historical metrics should be rerun against the current leakage-reduced preprocessing pipeline before being presented as current performance.
 
 ## Author
 
