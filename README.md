@@ -4,7 +4,6 @@
 
 This project predicts an individual's creditworthiness using historical financial data. The objective is to identify whether a customer is likely to default on a loan using machine learning classification techniques.
 
-This project was developed as part of the CodeAlpha Machine Learning Internship.
 
 ---
 
@@ -139,4 +138,3 @@ CodeAlpha_CreditScoringModel/
 ## Author
 
 Vignesh R
-Machine Learning Intern – CodeAlpha
