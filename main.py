@@ -4,7 +4,7 @@ main.py
 Entry point for the Credit Scoring Model pipeline.
 
 Orchestrates:
-  1. Data preprocessing (load, clean, impute, split, scale)
+  1. Data preprocessing (load, clean, split, train-fit imputation, scale)
   2. Exploratory Data Analysis (EDA plots saved to plots/)
   3. Model training  (Logistic Regression + Random Forest)
   4. Model evaluation (metrics + plots)
