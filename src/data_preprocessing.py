@@ -7,9 +7,9 @@ Credit Scoring Model project (Give Me Some Credit dataset).
 Steps performed:
   1. Load raw CSV
   2. Drop the index artifact column ("Unnamed: 0")
-  3. Impute missing values with column medians
-  4. Separate features (X) from the target (y)
-  5. Train / test split with stratification to preserve class balance
+  3. Separate features (X) from the target (y)
+  4. Train / test split with stratification to preserve class balance
+  5. Fit missing-value medians on training data only and apply to both splits
   6. Standard-scale features for linear models
 
 Author  : ML Engineering Team
@@ -196,7 +196,7 @@ def scale_features(X_train: pd.DataFrame, X_test: pd.DataFrame):
 
 def preprocess(filepath: str):
     """
-    Full preprocessing pipeline: load → clean → impute → split → scale.
+    Full preprocessing pipeline: load → clean → split → train-fit imputation → scale.
 
     Parameters
     ----------
@@ -207,14 +207,27 @@ def preprocess(filepath: str):
     X_train_scaled, X_test_scaled, X_train, X_test,
     y_train, y_test, feature_names, scaler
     """
-    df      = load_data(filepath)
-    df      = drop_index_column(df)
-    df      = impute_missing_values(df)
-    X, y    = split_features_target(df)
+    df = load_data(filepath)
+    df = drop_index_column(df)
+    X, y = split_features_target(df)
 
     feature_names = X.columns.tolist()
-
     X_train, X_test, y_train, y_test = train_test_split_data(X, y)
+
+    # Fit imputation statistics on the training fold only. Computing
+    # medians before splitting would leak information from the held-out
+    # test fold into model preprocessing.
+    X_train = X_train.copy()
+    X_test = X_test.copy()
+    for col in IMPUTE_COLS:
+        if col not in X_train.columns:
+            logger.warning("Column '%s' not found – skipping imputation.", col)
+            continue
+        median_val = X_train[col].median()
+        X_train[col] = X_train[col].fillna(median_val)
+        X_test[col] = X_test[col].fillna(median_val)
+        logger.info("Imputed '%s' using training median=%.4f.", col, median_val)
+
     X_train_scaled, X_test_scaled, scaler = scale_features(X_train, X_test)
 
     return (
